@@ -102,7 +102,9 @@
                             <constraint firstItem="zNI-NF-fs0" firstAttribute="top" secondItem="LnQ-9J-4rV" secondAttribute="bottom" constant="10" id="yhI-Zb-QDz"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Detail" id="4qk-ez-A9B"/>
+                    <navigationItem key="navigationItem" title="Detail" id="4qk-ez-A9B">
+                        <barButtonItem key="backBarButtonItem" title=" " id="F0q-p6-npc"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="bodyLabel" destination="DJx-kw-Qd8" id="hym-VZ-lOJ"/>
                         <outlet property="commentsTableView" destination="bbV-FQ-Os2" id="f4b-wa-ETP"/>
