@@ -17,6 +17,9 @@ class PostDetailView: UIViewController {
     @IBOutlet weak var countCommentsLabel: UILabel!
     @IBOutlet weak var commentsTableView: UITableView!
     
+//    @IBOutlet weak var firstViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var viewHeight: NSLayoutConstraint!
+    @IBOutlet weak var secondViewHeight: NSLayoutConstraint!
     // VARIABLES HERE
     var viewModel = PostDetailViewModel()
     
@@ -34,6 +37,7 @@ class PostDetailView: UIViewController {
         super.viewDidLoad()
         self.setupViewModel()
         self.setupUI()
+        self.setupStackViewHeight()
         
         ///Label click event
         let nameTap = UITapGestureRecognizer(target: self, action: #selector(PostDetailView.userNameClicked))
@@ -57,6 +61,20 @@ class PostDetailView: UIViewController {
         self.commentsTableView.dataSource = self
         self.commentsTableView.delegate = self
         self.commentsTableView.separatorStyle = .none
+    }
+    
+    func setupStackViewHeight() {
+        //SETUP FIRST VIEW
+        let screenRect = UIScreen.main.bounds
+        let screenWidth = screenRect.size.width
+        
+        let titleHeight = postTitle.height(withConstrainedWidth: screenWidth-40, font: .systemFont(ofSize: 17, weight: .semibold))
+        let bodyHeight = postBody.height(withConstrainedWidth: screenWidth-40, font: .systemFont(ofSize: 15, weight: .semibold))
+        
+        viewHeight.constant = CGFloat(titleHeight) + CGFloat(bodyHeight) + 180
+        
+        //SETUP SECOND VIEW **on didGetData -- refer to data collected
+        
     }
     
     fileprivate func setupViewModel() {
@@ -86,6 +104,20 @@ class PostDetailView: UIViewController {
         self.viewModel.didGetData = {
             self.dataComment = self.viewModel.comment
             self.commentsTableView.reloadData()
+            
+            //SETUP SECOND VIEW
+            let screenRect = UIScreen.main.bounds
+            let screenWidth = screenRect.size.width
+            var secondViewHeightFlag:CGFloat = 0
+            for item in self.dataComment {
+                let name = item.name?.height(withConstrainedWidth: screenWidth-40, font: .systemFont(ofSize: 13, weight: .regular))
+                let body = item.body?.height(withConstrainedWidth: screenWidth-40, font: .systemFont(ofSize: 14, weight: .semibold))
+                
+                let height = CGFloat(name ?? 0) + CGFloat(body ?? 0) + 85
+                secondViewHeightFlag += height
+            }
+            
+            self.secondViewHeight.constant = secondViewHeightFlag
         }
         
         self.viewModel.getDetailComment(id: postId)
